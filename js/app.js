@@ -26,6 +26,32 @@ window.addEventListener("load",()=>{
             Logar();
         })
     }
+
+    //botao de busca
+    var btnBusca = document.querySelector('#btn-busca');
+    if (btnBusca){
+        btnBusca.addEventListener('click',()=>{
+            buscar();
+        })
+    }
+    
+
+    //barra de busca
+    var barraBusca = document.querySelector('#busca');
+    if(barraBusca){
+        barraBusca.addEventListener('keyup',()=>{
+            buscar();
+        })
+    }
+  
+
+    //Sair
+    var btnSair = document.querySelector('#sair');
+    btnSair.addEventListener('click',(x)=>{
+        x.preventDefault();
+        sair();
+    })
+
 });
 
 function EnviarSugestao(){
@@ -34,9 +60,22 @@ function EnviarSugestao(){
     var mensagem = document.querySelector("#mensagem").value;
 
     if ( nome == "" || email == "" || mensagem ==""){
-        alert("Preencha os campos necessários!");
+        Swal.fire(
+            'Erro',
+            'Preencha os campos necessários!',
+            'error'
+          )
     } else{
-        alert("Sugestão enviada!");
+        
+        Swal.fire(
+            'Sucesso',
+            'Sugestão "' + mensagem + '" enviada!',
+            'success'
+          )
+
+        setTimeout(()=>{
+            window.location.href = "index.html";
+        },2000)
     }
 }
 
@@ -48,13 +87,31 @@ function Cadastrar(){
     
     //Validação
 
-    if (nome == "" || email =="" || senha == "" || csenha == ""){
-        alert('Preencha os campos necessários!');
+    if (nome == "" || email == "" || senha == "" || csenha == ""){
+
+        Swal.fire(
+            'Erro',
+            'Preencha os campos necessários!',
+            'error'
+          )
+
     }else if(senha != csenha){
-        alert("As senhas não correspondem!")
+        Swal.fire(
+            'Erro',
+            'As senhas não correspondem!',
+            'error'
+          )
     }
     else{
-        alert('Cadastro realizado')
+        Swal.fire(
+            'Sucesso',
+            'Cadastro realizado!',
+            'success'
+          )
+
+        setTimeout(()=>{
+            window.location.href = "perfil.html";
+        },2000)
     }
 }
 
@@ -65,13 +122,24 @@ function Logar(){
     //Validação
 
     if (email == "" || senha == ""){
-        alert('Preencha os campos necessários!');
+        Swal.fire(
+            'Erro',
+            'Preencha os campos necessários!',
+            'error'
+          )
     }
     else{
-        alert('Logado com sucesso!');
-        window.location.href = "perfil.html";
-    }    
-}
+        Swal.fire(
+            'Sucesso',
+            'Logado com sucesso!',
+            'success'
+          )
+
+        setTimeout(()=>{
+            window.location.href = "perfil.html";
+        },2000)
+    }
+    }   
 
 
 function storage(){
@@ -83,5 +151,61 @@ function storage(){
     
 }
 
-
 window.onload = storage();
+
+
+//botao buscar
+
+function buscar(){
+
+
+    //valor do que o usuario digitou na barra de pesquisa
+    
+    var input = document.querySelector('#busca').value;
+    var filtro = input.toUpperCase();
+
+    //div onde esta informações dos jogos
+    var conteudo = document.querySelectorAll('.infos');
+
+    conteudo.forEach((x)=>{
+        var nomeJogo = x.childNodes[1].innerHTML;
+
+        var valor = nomeJogo.toUpperCase().indexOf(filtro);
+
+        if(nomeJogo.toUpperCase().indexOf(filtro)> -1){
+            x.style.display = "";
+            x.parentNode.style.display = "";
+            x.childNodes[1].style.display = "";
+
+        }
+        else{
+
+            x.style.display = "None";
+            x.parentNode.style.display = "None";
+            x.childNodes[1].style.display = "None";            
+        }
+    })
+}
+
+function sair(){
+    Swal.fire({
+        title: 'Não nos abandone <i class="far fa-sad-tear"></i>',
+        text: "Tem certeza que deseja sair?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sim'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire(
+            'Deslogado!',
+            'Deslogado com sucesso!',
+            'success'
+          )
+          setTimeout(()=>{
+            window.location.href = "index.html";
+        },2000)
+        }
+      })
+}
